@@ -244,8 +244,8 @@ class HybridDetector:
         # Combine results (weighted average)
         combined_probability = (
             #llm can return malformed answers. If we dont get fake probability tag in llm-json response, assume a neutral score of 50
-                keyword_result['fake_probability'] * 0.4 +
-                llm_result.get('fake_probability', 50) * 0.6
+                keyword_result['fake_probability'] * 0.2 +
+                llm_result.get('fake_probability', 50) * 0.8
         )
 
         return {
