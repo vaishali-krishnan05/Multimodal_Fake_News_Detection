@@ -806,6 +806,28 @@
                 </div>
             `;
 
+            // Confidence
+            if (result.confidence !== undefined) {
+                html += `
+                    <div class="analysis-section">
+                        <div class="analysis-item">
+                            <span class="analysis-label">CONFIDENCE</span>
+                            <span class="analysis-value">${result.confidence}%</span>
+                        </div>
+                    </div>
+                `;
+            }
+
+            // Reasoning
+            if (result.reasoning) {
+                html += `
+                    <div class="analysis-section">
+                        <h3>💭 Reasoning</h3>
+                        <p style="color: #333; line-height: 1.6;">${result.reasoning}</p>
+                    </div>
+                `;
+            }
+
             // Red Flags
             if (result.red_flags && result.red_flags.length > 0) {
                 html += '<div class="red-flags"><h3>⚠️ Red Flags:</h3>';
@@ -815,24 +837,57 @@
                 html += '</div>';
             }
 
-            // Advanced Statistics
-            if (advanced && result.statistics) {
+            // LLM Statistics
+            if (result.statistics) {
                 const stats = result.statistics;
 
-                if (stats.metadata) {
-                    html += createAnalysisSection('🏷️ Metadata Analysis', stats.metadata);
+                if (stats.llm_authenticity !== undefined || stats.llm_confidence !== undefined || stats.risk_level) {
+                    let llmHtml = '<div class="analysis-section"><h3>🤖 LLM Analysis</h3>';
+                    if (stats.llm_authenticity !== undefined) {
+                        llmHtml += `
+                            <div class="analysis-item">
+                                <span class="analysis-label">LLM AUTHENTICITY</span>
+                                <span class="analysis-value">${stats.llm_authenticity}</span>
+                            </div>
+                        `;
+                    }
+                    if (stats.llm_confidence !== undefined) {
+                        llmHtml += `
+                            <div class="analysis-item">
+                                <span class="analysis-label">LLM CONFIDENCE</span>
+                                <span class="analysis-value">${stats.llm_confidence}%</span>
+                            </div>
+                        `;
+                    }
+                    if (stats.risk_level) {
+                        llmHtml += `
+                            <div class="analysis-item">
+                                <span class="analysis-label">RISK LEVEL</span>
+                                <span class="analysis-value">${stats.risk_level}</span>
+                            </div>
+                        `;
+                    }
+                    llmHtml += '</div>';
+                    html += llmHtml;
                 }
-                if (stats.error_level_analysis) {
-                    html += createAnalysisSection('🔢 Error Level Analysis', stats.error_level_analysis);
-                }
-                if (stats.noise_patterns) {
-                    html += createAnalysisSection('📡 Noise Pattern Analysis', stats.noise_patterns);
-                }
-                if (stats.clone_detection) {
-                    html += createAnalysisSection('🔀 Clone Detection', stats.clone_detection);
-                }
-                if (stats.ai_detection) {
-                    html += createAnalysisSection('🤖 AI Generation Detection', stats.ai_detection);
+
+                // Advanced Statistics (Image Analysis specific)
+                if (advanced) {
+                    if (stats.metadata) {
+                        html += createAnalysisSection('🏷️ Metadata Analysis', stats.metadata);
+                    }
+                    if (stats.error_level_analysis) {
+                        html += createAnalysisSection('🔢 Error Level Analysis', stats.error_level_analysis);
+                    }
+                    if (stats.noise_patterns) {
+                        html += createAnalysisSection('📡 Noise Pattern Analysis', stats.noise_patterns);
+                    }
+                    if (stats.clone_detection) {
+                        html += createAnalysisSection('🔀 Clone Detection', stats.clone_detection);
+                    }
+                    if (stats.ai_detection) {
+                        html += createAnalysisSection('🤖 AI Generation Detection', stats.ai_detection);
+                    }
                 }
             }
 

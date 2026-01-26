@@ -461,10 +461,10 @@ RED FLAGS: [List specific issues found, or "None" if authentic]
         }
 
         weights = {
-            'metadata': 0.15,
-            'ela': 0.30,
-            'noise': 0.20,
-            'clone': 0.25,
+            'metadata': 0.40,
+            'ela': 0.25,
+            'noise': 0.15,
+            'clone': 0.10,
             'ai': 0.10
         }
 
@@ -517,8 +517,7 @@ class VisionLLMDetector:
                 'authenticity_score': None
             }
 
-        prompt = """Analyze this image carefully for signs of manipulation or fakeness.
-
+        prompt = """Analyze this image carefully for signs of manipulation or fakeness. Analyze this image strictly for technical artifacts. Do not describe the artistic style. Look for and list: 1) Inconsistent shadows or lighting directions. 2) Asymmetrical pupils or iris reflections. 3) Blending artifacts around hair or edges. 4) warped textures in the background. Based on these technical flaws, give a probability score that this is AI-generated
 Evaluate:
 1. Digital manipulation artifacts (unnatural edges, inconsistent lighting)
 2. AI-generated characteristics (unrealistic details, impossible physics)
@@ -647,7 +646,7 @@ class HybridImageDetector:
         image_score = image_result.get('authenticity_score', 50)
         llm_score = llm_result.get('authenticity_score', 50)
 
-        combined_score = (image_score * 0.4) + (llm_score * 0.6)
+        combined_score = (image_score * 0.5) + (llm_score * 0.5)
 
         return {
             'authenticity_score': round(combined_score, 2),
