@@ -1,0 +1,29 @@
+This software needs Ollama and Ollama Python library 
+
+Install ollama
+ollama run 
+ollama list
+
+NAME              ID              SIZE      MODIFIED
+llava:latest      8dd30f6b0cb1    4.7 GB    44 hours ago
+llama3:latest     365c0bd3c000    4.7 GB    19 months ago
+
+for text detector
+PS C:\Users\vaikr> ollama run llama3:latest
+>>> hi
+
+for image detector
+PS C:\Users\vaikr> ollama run llava:latest
+>>> hi
+
+Run app.py as server for text detector and app_image.py for image detector
+
+goto code folder and run python3 -m http.server to start the http server for html file
+
+For text detector in browser
+http://localhost:8000/
+
+For image detector in browser
+http://localhost:8000/image_analyzer.html
+
+Select text/image mode, LLM mode or hybrid mode
